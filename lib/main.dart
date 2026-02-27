@@ -13,9 +13,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: MyHomePage(),
-      ),
+      home: MyHomePage(),
     );
   }
 }
@@ -55,14 +53,64 @@ class _MyHomePageState extends State<MyHomePage> {
         iOS: iosSettings,
       );
       await notificationsPlugin.initialize(settings: initializationSettings);
+
+      // --- ADICIONE ESTE BLOCO AQUI ---
+      // Isso solicita a permissão especificamente para Android 13+
+      final androidImplementation = notificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+
+      if (androidImplementation != null) {
+        await androidImplementation.requestNotificationsPermission();
+      }
+      // --------------------------------
   }
 
-  
+  Future<void> showInstantNotification({
+    required int id,
+    required String title,
+    required String body,
+  }) async {
+    await notificationsPlugin.show(
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails:  const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'instant_notification_channel_id',
+          'Instant Notifications',
+          channelDescription: 'Instant notification channel',
+          importance: Importance.max,
+          priority: Priority.high
+        ),
+        iOS: DarwinNotificationDetails(),
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text("ola")
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text('Flutter Pro'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FilledButton(
+              onPressed: () {
+                showInstantNotification(id: 0, title: 'Instant notif', body: 'body');
+              }, 
+              child: Text('Instant notif')
+            ),
+            FilledButton(
+              onPressed: () {}, 
+              child: Text('Scheduled notif')
+            ),
+          ],
+        ),
+      )
     );
   }
 }
