@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> scheduleReminder({
     required int id,
     required String title,
-    String? body,
+    required String body,
   }) async {
     TZDateTime now = TZDateTime.now(local);
     TZDateTime scheduledDate = now.add(
@@ -111,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
         iOS: DarwinNotificationDetails()
       ), 
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime, // or dateAndTime, ou ainda outros valores
     );
   }
 
@@ -133,7 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('Instant notif')
             ),
             FilledButton(
-              onPressed: () {}, 
+              onPressed: () {
+                scheduleReminder(id: 1, title: 'Schedule notify', body: 'body');
+              }, 
               child: Text('Scheduled notif')
             ),
           ],
