@@ -102,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
       scheduledDate: scheduledDate, 
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
-          'daily_reminder_channel_id',
+          'daily_reminder_channel_id', // A unique ID to group notifications together.
           'Dailt Reminders',
           channelDescription: 'Reminder to complete daily habits',
           importance: Importance.max,
