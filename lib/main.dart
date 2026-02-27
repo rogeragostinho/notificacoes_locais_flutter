@@ -87,6 +87,34 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<void> scheduleReminder({
+    required int id,
+    required String title,
+    String? body,
+  }) async {
+    TZDateTime now = TZDateTime.now(local);
+    TZDateTime scheduledDate = now.add(
+      Duration(seconds: 3),
+    );
+
+    await notificationsPlugin.zonedSchedule(
+      id: id, 
+      scheduledDate: scheduledDate, 
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'daily_reminder_channel_id',
+          'Dailt Reminders',
+          channelDescription: 'Reminder to complete daily habits',
+          importance: Importance.max,
+          priority: Priority.high
+        ),
+        iOS: DarwinNotificationDetails()
+      ), 
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
