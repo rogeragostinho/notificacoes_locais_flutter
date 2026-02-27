@@ -4,6 +4,8 @@ import 'package:timezone/data/latest_all.dart';
 import 'package:timezone/timezone.dart';
 
 void main() {
+  //! https://www.fluttermapp.com/articles/local-notifications
+
   runApp(const MainApp());
 }
 
